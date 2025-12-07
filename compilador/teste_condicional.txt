@@ -1,0 +1,13 @@
+{
+    int contador;
+    contador = 0;
+
+    while (contador < 5) {
+        if (contador == 3) {
+            output(true);
+        } else {
+            output(false);
+        }
+        contador = contador + 1;
+    }
+}

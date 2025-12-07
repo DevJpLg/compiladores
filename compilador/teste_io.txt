@@ -1,0 +1,11 @@
+{
+    int idade;
+    real altura;
+    str nome;
+
+    input(idade);
+    altura = 1.75;
+    
+    output(idade);
+    output(altura);
+}

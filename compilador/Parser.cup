@@ -1,0 +1,92 @@
+package compilador;
+
+import java_cup.runtime.*;
+
+parser code {:
+    // Mostra erro com linha e coluna
+    public void syntax_error(Symbol s) {
+        System.err.println("Erro de Sintaxe na Linha " + (s.left + 1) + 
+                           " Coluna " + (s.right + 1) + ". Token inesperado: " + s.value);
+    }
+
+    // AQUI ESTÁ A CORREÇÃO DO "SUCESSO FALSO":
+    // Obriga o parser a lançar uma exceção e parar tudo quando o erro for fatal
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
+        throw new Exception("Erro Fatal de Sintaxe"); 
+    }
+:};
+
+/* --- TERMINAIS (Devem bater com o Lexer) --- */
+terminal IF, ELSE, WHILE, FOR, INPUT, OUTPUT;
+terminal TIPO_INT, TIPO_REAL, TIPO_CHR, TIPO_STR;
+terminal TRUE, FALSE;
+terminal MAIS, MENOS, MULT, DIV, IGUAL;
+terminal IGUAL_IGUAL, MENOR, MAIOR;
+terminal ABRE_PAR, FECHA_PAR, ABRE_CHAVE, FECHA_CHAVE, PONTO_VIRGULA;
+terminal String ID;
+terminal Integer NUM; /* Atenção: NUM agora é Integer, pois o Lexer converte o double para int */
+
+/* --- NÃO TERMINAIS --- */
+non terminal bloco_comandos, lista_cmds, comando;
+non terminal declaracao, tipo, atribuicao, atribuicao_inc;
+non terminal if_else, opt_else, while_loop, for_loop, io;
+non terminal expressao, termo;
+
+/* --- PRECEDÊNCIA (Resolve conflitos matemáticos e if-else) --- */
+precedence left IGUAL_IGUAL, MENOR, MAIOR;
+precedence left MAIS, MENOS;
+precedence left MULT, DIV;
+precedence left ELSE;
+
+/* --- GRAMÁTICA --- */
+start with bloco_comandos;
+
+bloco_comandos ::= ABRE_CHAVE lista_cmds FECHA_CHAVE
+                 | ABRE_CHAVE FECHA_CHAVE;
+
+lista_cmds     ::= comando lista_cmds
+                 | comando;
+
+comando        ::= declaracao
+                 | atribuicao
+                 | if_else
+                 | while_loop
+                 | for_loop
+                 | io
+                 | bloco_comandos;
+
+declaracao     ::= tipo ID PONTO_VIRGULA;
+
+tipo           ::= TIPO_INT | TIPO_REAL | TIPO_CHR | TIPO_STR;
+
+atribuicao     ::= ID IGUAL expressao PONTO_VIRGULA;
+
+/* Regra auxiliar para incremento do for (i = i + 1) sem ponto e virgula */
+atribuicao_inc ::= ID IGUAL expressao; 
+
+if_else        ::= IF ABRE_PAR expressao FECHA_PAR bloco_comandos opt_else;
+
+opt_else       ::= ELSE bloco_comandos
+                 | /* vazio */ ;
+
+while_loop     ::= WHILE ABRE_PAR expressao FECHA_PAR bloco_comandos;
+
+for_loop       ::= FOR ABRE_PAR atribuicao expressao PONTO_VIRGULA atribuicao_inc FECHA_PAR bloco_comandos;
+
+io             ::= INPUT ABRE_PAR ID FECHA_PAR PONTO_VIRGULA
+                 | OUTPUT ABRE_PAR expressao FECHA_PAR PONTO_VIRGULA;
+
+expressao      ::= expressao MAIS expressao
+                 | expressao MENOS expressao
+                 | expressao MULT expressao
+                 | expressao DIV expressao
+                 | expressao IGUAL_IGUAL expressao
+                 | expressao MENOR expressao
+                 | expressao MAIOR expressao
+                 | termo;
+
+termo          ::= ID
+                 | NUM
+                 | TRUE
+                 | FALSE
+                 | ABRE_PAR expressao FECHA_PAR;

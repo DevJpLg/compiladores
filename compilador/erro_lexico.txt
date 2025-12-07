@@ -1,0 +1,6 @@
+{
+    int valor;
+    valor = 100;
+    
+    valor = valor @ 2; 
+}
