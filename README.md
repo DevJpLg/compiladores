@@ -112,8 +112,6 @@ Erro Sintatico [linha 0, col 0]: token inesperado -> ?
 
 === Analise concluida ===
 ```
-> **Nota:** Os caracteres `?` no lugar de `—` podem aparecer dependendo da configuração de codificação (encoding) do terminal do Windows. Isso é apenas visual e não indica um erro na análise.
-
 ---
 
 ## 📄 Arquivos para Entrega
