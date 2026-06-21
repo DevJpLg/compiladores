@@ -1,11 +1,14 @@
+/* Exemplo 1 - Leitura e escrita de dados */
 {
-    int idade;
-    real altura;
-    str nome;
+    int matricula;
+    real media;
+    str disciplina;
 
-    input(idade);
-    altura = 1.75;
-    
-    output(idade);
-    output(altura);
+    scanf(matricula);
+    scanf(disciplina);
+
+    media = 8.5;
+
+    printf(matricula);
+    printf(media);
 }

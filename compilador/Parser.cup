@@ -2,91 +2,124 @@ package compilador;
 
 import java_cup.runtime.*;
 
+/* Analisador sintatico da linguagem LangZ */
 parser code {:
-    // Mostra erro com linha e coluna
+
+    // Exibe o erro com numero de linha e o token que causou o problema
     public void syntax_error(Symbol s) {
-        System.err.println("Erro de Sintaxe na Linha " + (s.left + 1) + 
-                           " Coluna " + (s.right + 1) + ". Token inesperado: " + s.value);
+        String tok = (s.value != null) ? s.value.toString() : "?";
+        System.err.println("Erro Sintatico [linha " + (s.left + 1) +
+                           ", col " + (s.right + 1) +
+                           "]: token inesperado -> " + tok);
     }
 
-    // AQUI ESTÁ A CORREÇÃO DO "SUCESSO FALSO":
-    // Obriga o parser a lançar uma exceção e parar tudo quando o erro for fatal
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
-        throw new Exception("Erro Fatal de Sintaxe"); 
+    public void unrecovered_syntax_error(Symbol s) throws Exception {
+        String tok = (s.value != null) ? s.value.toString() : "fim de arquivo";
+        throw new Exception("Erro fatal [linha " + (s.left + 1) +
+                            "]: analise interrompida em -> " + tok);
     }
+
 :};
 
-/* --- TERMINAIS (Devem bater com o Lexer) --- */
-terminal IF, ELSE, WHILE, FOR, INPUT, OUTPUT;
-terminal TIPO_INT, TIPO_REAL, TIPO_CHR, TIPO_STR;
+/* === Terminais === */
+terminal IF, ELSE, WHILE, FOR, PRINTF, SCANF;
+terminal T_INT, T_REAL, T_CHR, T_STR;
 terminal TRUE, FALSE;
-terminal MAIS, MENOS, MULT, DIV, IGUAL;
-terminal IGUAL_IGUAL, MENOR, MAIOR;
-terminal ABRE_PAR, FECHA_PAR, ABRE_CHAVE, FECHA_CHAVE, PONTO_VIRGULA;
+terminal PLUS, MINUS, TIMES, DIV, ATTR;
+terminal EQ, NEQ, LT, GT, LEQ, GEQ;
+terminal AND, OR, NOT;
+terminal LPAR, RPAR, LBRACE, RBRACE, SEMI;
 terminal String ID;
-terminal Integer NUM; /* Atenção: NUM agora é Integer, pois o Lexer converte o double para int */
+terminal Double NUM;
+terminal String LIT_CHR;
+terminal String LIT_STR;
 
-/* --- NÃO TERMINAIS --- */
-non terminal bloco_comandos, lista_cmds, comando;
-non terminal declaracao, tipo, atribuicao, atribuicao_inc;
-non terminal if_else, opt_else, while_loop, for_loop, io;
-non terminal expressao, termo;
+/* === Nao Terminais === */
+non terminal programa;
+non terminal bloco, lista_cmd, cmd;
+non terminal decl, tipo, atrib, atrib_inc;
+non terminal se_senao, opt_senao, enquanto, para, escrever, ler;
+non terminal expr, termo;
 
-/* --- PRECEDÊNCIA (Resolve conflitos matemáticos e if-else) --- */
-precedence left IGUAL_IGUAL, MENOR, MAIOR;
-precedence left MAIS, MENOS;
-precedence left MULT, DIV;
+/* === Precedencia de operadores (menor para maior) === */
+precedence left OR;
+precedence left AND;
+precedence left EQ, NEQ;
+precedence left LT, GT, LEQ, GEQ;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIV;
+precedence right NOT;
 precedence left ELSE;
 
-/* --- GRAMÁTICA --- */
-start with bloco_comandos;
+/* === Gramatica === */
+start with programa;
 
-bloco_comandos ::= ABRE_CHAVE lista_cmds FECHA_CHAVE
-                 | ABRE_CHAVE FECHA_CHAVE;
+programa  ::= bloco;
 
-lista_cmds     ::= comando lista_cmds
-                 | comando;
+bloco     ::= LBRACE lista_cmd RBRACE
+            | LBRACE RBRACE;
 
-comando        ::= declaracao
-                 | atribuicao
-                 | if_else
-                 | while_loop
-                 | for_loop
-                 | io
-                 | bloco_comandos;
+lista_cmd ::= cmd lista_cmd
+            | cmd;
 
-declaracao     ::= tipo ID PONTO_VIRGULA;
+cmd       ::= decl
+            | atrib
+            | se_senao
+            | enquanto
+            | para
+            | escrever
+            | ler
+            | bloco;
 
-tipo           ::= TIPO_INT | TIPO_REAL | TIPO_CHR | TIPO_STR;
+/* Declaracao de variavel: tipo nome; */
+decl      ::= tipo ID SEMI;
 
-atribuicao     ::= ID IGUAL expressao PONTO_VIRGULA;
+tipo      ::= T_INT | T_REAL | T_CHR | T_STR;
 
-/* Regra auxiliar para incremento do for (i = i + 1) sem ponto e virgula */
-atribuicao_inc ::= ID IGUAL expressao; 
+/* Atribuicao: nome = expr; */
+atrib     ::= ID ATTR expr SEMI;
 
-if_else        ::= IF ABRE_PAR expressao FECHA_PAR bloco_comandos opt_else;
+/* Incremento do for (sem ponto e virgula) */
+atrib_inc ::= ID ATTR expr;
 
-opt_else       ::= ELSE bloco_comandos
-                 | /* vazio */ ;
+/* Condicional */
+se_senao  ::= IF LPAR expr RPAR bloco opt_senao;
 
-while_loop     ::= WHILE ABRE_PAR expressao FECHA_PAR bloco_comandos;
+opt_senao ::= ELSE bloco
+            | /* vazio */;
 
-for_loop       ::= FOR ABRE_PAR atribuicao expressao PONTO_VIRGULA atribuicao_inc FECHA_PAR bloco_comandos;
+/* Laco while */
+enquanto  ::= WHILE LPAR expr RPAR bloco;
 
-io             ::= INPUT ABRE_PAR ID FECHA_PAR PONTO_VIRGULA
-                 | OUTPUT ABRE_PAR expressao FECHA_PAR PONTO_VIRGULA;
+/* Laco for */
+para      ::= FOR LPAR atrib expr SEMI atrib_inc RPAR bloco;
 
-expressao      ::= expressao MAIS expressao
-                 | expressao MENOS expressao
-                 | expressao MULT expressao
-                 | expressao DIV expressao
-                 | expressao IGUAL_IGUAL expressao
-                 | expressao MENOR expressao
-                 | expressao MAIOR expressao
-                 | termo;
+/* Saida: printf(expr); */
+escrever  ::= PRINTF LPAR expr RPAR SEMI;
 
-termo          ::= ID
-                 | NUM
-                 | TRUE
-                 | FALSE
-                 | ABRE_PAR expressao FECHA_PAR;
+/* Entrada: scanf(id); */
+ler       ::= SCANF LPAR ID RPAR SEMI;
+
+/* Expressoes aritmeticas, relacionais e logicas */
+expr      ::= expr PLUS  expr
+            | expr MINUS expr
+            | expr TIMES expr
+            | expr DIV   expr
+            | expr EQ    expr
+            | expr NEQ   expr
+            | expr LT    expr
+            | expr GT    expr
+            | expr LEQ   expr
+            | expr GEQ   expr
+            | expr AND   expr
+            | expr OR    expr
+            | NOT expr
+            | termo;
+
+termo     ::= ID
+            | NUM
+            | LIT_CHR
+            | LIT_STR
+            | TRUE
+            | FALSE
+            | LPAR expr RPAR;

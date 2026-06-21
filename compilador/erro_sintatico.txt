@@ -1,6 +1,7 @@
+/* ERRO 1: Declaracao de variavel sem ponto e virgula (linha 4) */
 {
-    int x
-    x = 10;
-    
-    output(x);
+    real preco
+    preco = 29.90;
+
+    printf(preco);
 }

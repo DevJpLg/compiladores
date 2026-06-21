@@ -10,71 +10,82 @@ import java_cup.runtime.Symbol;
 %line
 %column
 
-/* --- MACROS --- */
-Letra = [a-zA-Z]
-Digito = [0-9]
+/* === Definicoes auxiliares (macros) === */
+Letra     = [a-zA-Z_]
+Digito    = [0-9]
+Espaco    = [ \t\r\n\f]+
 
-/* Ignora espaços, tabs e novas linhas */
-Espaco = [ \t\r\n\f]+
+/* Identificador comeca com letra e pode conter digitos */
+Id        = {Letra}({Letra}|{Digito})*
 
-/* Identificadores: Letra seguida de letras ou números */
-Identificador = {Letra}({Letra}|{Digito})*
+/* Numero inteiro ou real (ex: 42, 3.14) */
+Num       = {Digito}+("\."{Digito}+)?
 
-/* Números: Aceita inteiros (10) e reais (10.5) */
-Numero = {Digito}+(\.{Digito}+)?
+/* Literais de texto */
+LitChr    = "'"[^'\n]"'"
+LitStr    = \"[^\"]*\"
 
-/* Comentários: Tudo entre / e / */
-Comentario = "/*" ~"*/"
+/* Comentarios de bloco: /* ... */ */
+Coment    = "/*" ~"*/"
 
 %%
 
-/* --- REGRAS --- */
+/* === Regras de analise lexica === */
 
-/* 1. Ignorar Espaços e Comentários (IMPORTANTE: Deve vir antes de tudo) */
-{Espaco}     { /* Ignora e não retorna nada */ }
-{Comentario} { /* Ignora e não retorna nada */ }
+/* Espacos e comentarios sao ignorados */
+{Espaco}   { }
+{Coment}   { }
 
-/* 2. Palavras-chave */
-"if"         { return new Symbol(sym.IF, yyline, yycolumn); }
-"else"       { return new Symbol(sym.ELSE, yyline, yycolumn); }
-"while"      { return new Symbol(sym.WHILE, yyline, yycolumn); }
-"for"        { return new Symbol(sym.FOR, yyline, yycolumn); }
-"input"      { return new Symbol(sym.INPUT, yyline, yycolumn); }
-"output"     { return new Symbol(sym.OUTPUT, yyline, yycolumn); }
+/* Palavras reservadas da linguagem LangZ */
+"if"       { return new Symbol(sym.IF,     yyline, yycolumn); }
+"else"     { return new Symbol(sym.ELSE,   yyline, yycolumn); }
+"while"    { return new Symbol(sym.WHILE,  yyline, yycolumn); }
+"for"      { return new Symbol(sym.FOR,    yyline, yycolumn); }
+"printf"   { return new Symbol(sym.PRINTF, yyline, yycolumn); }
+"scanf"    { return new Symbol(sym.SCANF,  yyline, yycolumn); }
+"true"     { return new Symbol(sym.TRUE,   yyline, yycolumn); }
+"false"    { return new Symbol(sym.FALSE,  yyline, yycolumn); }
 
-/* 3. Tipos de Dados */
-"int"        { return new Symbol(sym.TIPO_INT, yyline, yycolumn); }
-"real"       { return new Symbol(sym.TIPO_REAL, yyline, yycolumn); }
-"chr"        { return new Symbol(sym.TIPO_CHR, yyline, yycolumn); }
-"str"        { return new Symbol(sym.TIPO_STR, yyline, yycolumn); }
+/* Tipos primitivos */
+"int"      { return new Symbol(sym.T_INT,  yyline, yycolumn); }
+"real"     { return new Symbol(sym.T_REAL, yyline, yycolumn); }
+"chr"      { return new Symbol(sym.T_CHR,  yyline, yycolumn); }
+"str"      { return new Symbol(sym.T_STR,  yyline, yycolumn); }
 
-/* 4. Literais Booleanos */
-"true"       { return new Symbol(sym.TRUE, yyline, yycolumn); }
-"false"      { return new Symbol(sym.FALSE, yyline, yycolumn); }
+/* Operadores relacionais (tokens de dois caracteres antes dos de um) */
+"=="       { return new Symbol(sym.EQ,  yyline, yycolumn); }
+"!="       { return new Symbol(sym.NEQ, yyline, yycolumn); }
+"<="       { return new Symbol(sym.LEQ, yyline, yycolumn); }
+">="       { return new Symbol(sym.GEQ, yyline, yycolumn); }
 
-/* 5. Operadores e Pontuação */
-"+"          { return new Symbol(sym.MAIS, yyline, yycolumn); }
-"-"          { return new Symbol(sym.MENOS, yyline, yycolumn); }
-"*"          { return new Symbol(sym.MULT, yyline, yycolumn); }
-"/"          { return new Symbol(sym.DIV, yyline, yycolumn); }
-"="          { return new Symbol(sym.IGUAL, yyline, yycolumn); }
-"=="         { return new Symbol(sym.IGUAL_IGUAL, yyline, yycolumn); }
-"<"          { return new Symbol(sym.MENOR, yyline, yycolumn); }
-">"          { return new Symbol(sym.MAIOR, yyline, yycolumn); }
-"("          { return new Symbol(sym.ABRE_PAR, yyline, yycolumn); }
-")"          { return new Symbol(sym.FECHA_PAR, yyline, yycolumn); }
-"{"          { return new Symbol(sym.ABRE_CHAVE, yyline, yycolumn); }
-"}"          { return new Symbol(sym.FECHA_CHAVE, yyline, yycolumn); }
-";"          { return new Symbol(sym.PONTO_VIRGULA, yyline, yycolumn); }
+/* Operadores logicos */
+"&&"       { return new Symbol(sym.AND, yyline, yycolumn); }
+"||"       { return new Symbol(sym.OR,  yyline, yycolumn); }
+"!"        { return new Symbol(sym.NOT, yyline, yycolumn); }
 
-/* 6. Identificadores e Números (Token dinâmico) */
-{Identificador} { return new Symbol(sym.ID, yyline, yycolumn, yytext()); }
+/* Operadores aritmeticos e de atribuicao */
+"+"        { return new Symbol(sym.PLUS,  yyline, yycolumn); }
+"-"        { return new Symbol(sym.MINUS, yyline, yycolumn); }
+"*"        { return new Symbol(sym.TIMES, yyline, yycolumn); }
+"/"        { return new Symbol(sym.DIV,   yyline, yycolumn); }
+"="        { return new Symbol(sym.ATTR,  yyline, yycolumn); }
+"<"        { return new Symbol(sym.LT,    yyline, yycolumn); }
+">"        { return new Symbol(sym.GT,    yyline, yycolumn); }
 
-{Numero}        { 
-    /* CORREÇÃO CRÍTICA: Lê como double para aceitar ponto, converte para int */
-    double val = Double.parseDouble(yytext());
-    return new Symbol(sym.NUM, yyline, yycolumn, (int) val); 
-}
+/* Delimitadores */
+"("        { return new Symbol(sym.LPAR,   yyline, yycolumn); }
+")"        { return new Symbol(sym.RPAR,   yyline, yycolumn); }
+"{"        { return new Symbol(sym.LBRACE, yyline, yycolumn); }
+"}"        { return new Symbol(sym.RBRACE, yyline, yycolumn); }
+";"        { return new Symbol(sym.SEMI,   yyline, yycolumn); }
 
-/* 7. Erro para qualquer caractere não reconhecido */
-.            { System.err.println("Caracter ilegal: " + yytext()); }
+/* Literais de caracter e string */
+{LitChr}   { return new Symbol(sym.LIT_CHR, yyline, yycolumn, yytext()); }
+{LitStr}   { return new Symbol(sym.LIT_STR, yyline, yycolumn, yytext()); }
+
+/* Identificadores e numeros — vem apos as palavras-chave */
+{Id}       { return new Symbol(sym.ID,  yyline, yycolumn, yytext()); }
+{Num}      { return new Symbol(sym.NUM, yyline, yycolumn, Double.parseDouble(yytext())); }
+
+/* Qualquer outro caractere e um erro lexico */
+.          { System.err.println("Erro Lexico [linha " + (yyline+1) + "]: caractere invalido '" + yytext() + "'"); }

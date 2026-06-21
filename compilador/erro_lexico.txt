@@ -1,6 +1,10 @@
+/* ERRO 3: Falta fechar a chave do bloco principal */
 {
-    int valor;
-    valor = 100;
-    
-    valor = valor @ 2; 
-}
+    int n;
+    n = 10;
+
+    while (n > 0) {
+        n = n - 1;
+    }
+
+/* chave de fechamento do bloco principal ausente */

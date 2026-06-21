@@ -1,11 +1,13 @@
+/* Exemplo 3 - Somatorio com laco for */
 {
-    int i;
-    int total;
-    total = 0;
-    
-    for (i = 0; i < 10; i = i + 1) {
-        total = total + i;
+    int k;
+    int soma;
+
+    soma = 0;
+
+    for (k = 1; k <= 5; k = k + 1) {
+        soma = soma + k;
     }
-    
-    output(total);
+
+    printf(soma);
 }

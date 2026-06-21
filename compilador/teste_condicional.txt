@@ -1,13 +1,20 @@
+/* Exemplo 2 - Verificacao de aprovacao com if/else e while */
 {
-    int contador;
-    contador = 0;
+    int tentativas;
+    real nota;
 
-    while (contador < 5) {
-        if (contador == 3) {
-            output(true);
+    tentativas = 0;
+    nota = 0.0;
+
+    while (tentativas < 3) {
+        scanf(nota);
+
+        if (nota >= 6.0) {
+            printf(true);
         } else {
-            output(false);
+            printf(false);
         }
-        contador = contador + 1;
+
+        tentativas = tentativas + 1;
     }
 }

@@ -1,8 +1,9 @@
+/* ERRO 2: Condicao do if sem parenteses (linha 5) */
 {
-    int a;
-    a = 5;
+    int pontos;
+    pontos = 75;
 
-    if a > 0 {
-        output(a);
+    if pontos > 60 {
+        printf(true);
     }
 }

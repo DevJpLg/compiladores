@@ -8,35 +8,43 @@ package compilador;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int INPUT = 6;
-  public static final int MENOS = 15;
-  public static final int MENOR = 20;
-  public static final int ELSE = 3;
-  public static final int IGUAL = 18;
-  public static final int WHILE = 4;
-  public static final int TRUE = 12;
-  public static final int IF = 2;
-  public static final int ID = 27;
-  public static final int NUM = 28;
-  public static final int MAIS = 14;
-  public static final int IGUAL_IGUAL = 19;
-  public static final int TIPO_STR = 11;
-  public static final int EOF = 0;
-  public static final int MULT = 16;
-  public static final int DIV = 17;
-  public static final int TIPO_CHR = 10;
-  public static final int FALSE = 13;
-  public static final int MAIOR = 21;
-  public static final int error = 1;
-  public static final int ABRE_CHAVE = 24;
-  public static final int TIPO_REAL = 9;
-  public static final int PONTO_VIRGULA = 26;
-  public static final int FECHA_PAR = 23;
+  public static final int T_REAL = 9;
+  public static final int SCANF = 7;
+  public static final int T_STR = 11;
+  public static final int SEMI = 32;
+  public static final int T_INT = 8;
   public static final int FOR = 5;
-  public static final int OUTPUT = 7;
-  public static final int FECHA_CHAVE = 25;
-  public static final int TIPO_INT = 8;
-  public static final int ABRE_PAR = 22;
+  public static final int MINUS = 15;
+  public static final int NOT = 27;
+  public static final int AND = 25;
+  public static final int LT = 21;
+  public static final int RPAR = 29;
+  public static final int OR = 26;
+  public static final int DIV = 17;
+  public static final int GEQ = 24;
+  public static final int NUM = 34;
+  public static final int PLUS = 14;
+  public static final int IF = 2;
+  public static final int ID = 33;
+  public static final int EOF = 0;
+  public static final int TRUE = 12;
+  public static final int error = 1;
+  public static final int NEQ = 20;
+  public static final int EQ = 19;
+  public static final int PRINTF = 6;
+  public static final int TIMES = 16;
+  public static final int ATTR = 18;
+  public static final int LBRACE = 30;
+  public static final int ELSE = 3;
+  public static final int LIT_CHR = 35;
+  public static final int WHILE = 4;
+  public static final int RBRACE = 31;
+  public static final int LEQ = 23;
+  public static final int LPAR = 28;
+  public static final int T_CHR = 10;
+  public static final int FALSE = 13;
+  public static final int GT = 22;
+  public static final int LIT_STR = 36;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -44,29 +52,37 @@ public class sym {
   "ELSE",
   "WHILE",
   "FOR",
-  "INPUT",
-  "OUTPUT",
-  "TIPO_INT",
-  "TIPO_REAL",
-  "TIPO_CHR",
-  "TIPO_STR",
+  "PRINTF",
+  "SCANF",
+  "T_INT",
+  "T_REAL",
+  "T_CHR",
+  "T_STR",
   "TRUE",
   "FALSE",
-  "MAIS",
-  "MENOS",
-  "MULT",
+  "PLUS",
+  "MINUS",
+  "TIMES",
   "DIV",
-  "IGUAL",
-  "IGUAL_IGUAL",
-  "MENOR",
-  "MAIOR",
-  "ABRE_PAR",
-  "FECHA_PAR",
-  "ABRE_CHAVE",
-  "FECHA_CHAVE",
-  "PONTO_VIRGULA",
+  "ATTR",
+  "EQ",
+  "NEQ",
+  "LT",
+  "GT",
+  "LEQ",
+  "GEQ",
+  "AND",
+  "OR",
+  "NOT",
+  "LPAR",
+  "RPAR",
+  "LBRACE",
+  "RBRACE",
+  "SEMI",
   "ID",
-  "NUM"
+  "NUM",
+  "LIT_CHR",
+  "LIT_STR"
   };
 }
 
