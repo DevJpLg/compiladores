@@ -1,9 +1,4 @@
-# 🖥️ Trabalho P1 — Disciplina de Compiladores - João Pedro, Breno e Gabriel
-
-> Implementação de um analisador léxico e sintático para a linguagem fictícia **LangZ**,
-> utilizando as ferramentas **JFlex** (análise léxica) e **CUP** (análise sintática).
-
----
+# 🖥️ Trabalho P1 - Compiladores - Grupo: João Pedro, Breno e Gabriel
 
 ## 📁 Estrutura do Projeto
 
@@ -28,30 +23,7 @@ compiladores/
     └── erro_lexico.txt          # ❌ Erro sintático: bloco sem chave de fechamento
 ```
 
----
-
-## 🔤 Sobre a Linguagem LangZ
-
-A **LangZ** é uma linguagem imperativa fictícia criada para fins didáticos.
-
-| Recurso | Sintaxe |
-|---|---|
-| **Tipos de dados** | `int`, `real`, `chr`, `str` |
-| **Bloco de comandos** | `{` ... `}` |
-| **Declaração** | `int x;` |
-| **Atribuição** | `x = 10;` |
-| **Expressões aritméticas** | `+`, `-`, `*`, `/` |
-| **Expressões lógicas** | `&&`, `||`, `!`, `==`, `!=`, `<`, `>`, `<=`, `>=` |
-| **Condicional** | `if (cond) { } else { }` |
-| **Laço while** | `while (cond) { }` |
-| **Laço for** | `for (ini; cond; inc) { }` |
-| **Saída** | `printf(expr);` |
-| **Entrada** | `scanf(id);` |
-| **Comentários** | `/* ... */` |
-
----
-
-## ▶️ Como Rodar no Windows 11
+## ▶️ Como Rodar
 
 > ⚠️ **Importante:** Os comandos abaixo são para o **Prompt de Comando (CMD)**, não PowerShell.
 > Para abrir o CMD na pasta certa: no Explorador de Arquivos, navegue até a pasta `compiladores`, clique na barra de endereço, digite `cmd` e pressione **Enter**.
