@@ -24,12 +24,6 @@ compiladores/
 ```
 
 ## ▶️ Como Rodar
-
-> ⚠️ **Importante:** Os comandos abaixo são para o **Prompt de Comando (CMD)**, não PowerShell.
-> Para abrir o CMD na pasta certa: no Explorador de Arquivos, navegue até a pasta `compiladores`, clique na barra de endereço, digite `cmd` e pressione **Enter**.
-
-> Os passos 2 e 3 usam o `java` normal. Os passos 4 e 5 precisam do **caminho completo do JDK 26** porque o sistema tem dois Javas instalados.
-
 ---
 
 ### Passo 1 — Limpar arquivos gerados anteriormente
