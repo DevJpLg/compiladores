@@ -20,7 +20,7 @@ compiladores/
     │
     ├── erro_sintatico.txt       # ❌ Erro sintático: declaração sem ponto e vírgula
     ├── erro_expressao.txt       # ❌ Erro sintático: if sem parênteses
-    └── erro_lexico.txt          # ❌ Erro sintático: bloco sem chave de fechamento
+    └── erro_bloco.txt           # ❌ Erro sintático: bloco sem chave de fechamento
 ```
 
 ## ▶️ Como Rodar
@@ -100,9 +100,9 @@ Erro Sintatico [linha 4, col 5]: token inesperado -> preco
 Erro Sintatico [linha 6, col 8]: token inesperado -> pontos
   FALHA — Erro fatal [linha 6]: analise interrompida em -> pontos
 
-[erro_lexico.txt]
-Erro Sintatico [linha 0, col 0]: token inesperado -> ?
-  FALHA — Erro fatal [linha 0]: analise interrompida em -> fim de arquivo
+[erro_bloco.txt]
+Erro Sintatico [fim do arquivo]: esperava mais tokens
+  FALHA — Erro fatal [fim do arquivo]: esperava '}' para fechar o bloco
 
 === Analise concluida ===
 ```
@@ -120,4 +120,4 @@ Erro Sintatico [linha 0, col 0]: token inesperado -> ?
 | `compilador/teste_loop.txt` | Código correto — laço for |
 | `compilador/erro_sintatico.txt` | Erro de sintaxe: falta `;` na declaração |
 | `compilador/erro_expressao.txt` | Erro de sintaxe: `if` sem parênteses |
-| `compilador/erro_lexico.txt` | Erro de sintaxe: bloco sem `}` de fechamento |
+| `compilador/erro_bloco.txt` | Erro de sintaxe: bloco sem `}` de fechamento |

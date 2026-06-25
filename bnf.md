@@ -82,7 +82,6 @@ Um programa LangZ é formado por um único bloco delimitado por chaves.
          | <expr> <op_rel>  <expr>
          | <expr> <op_log>  <expr>
          | "!" <expr>
-         | "(" <expr> ")"
          | <termo>
 
 <termo> ::= <id>
@@ -91,6 +90,7 @@ Um programa LangZ é formado por um único bloco delimitado por chaves.
            | <lit_str>
            | "true"
            | "false"
+           | "(" <expr> ")"
 ```
 
 ---

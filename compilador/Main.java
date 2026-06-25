@@ -11,7 +11,7 @@ public class Main {
         String pasta   = raiz + "/compilador/";
 
         String[] corretos = { "teste_io.txt", "teste_condicional.txt", "teste_loop.txt" };
-        String[] erros    = { "erro_sintatico.txt", "erro_expressao.txt", "erro_lexico.txt" };
+        String[] erros    = { "erro_sintatico.txt", "erro_expressao.txt", "erro_bloco.txt" };
 
         System.out.println("=== Linguagem LangZ — Analisador Lexico/Sintatico ===\n");
 

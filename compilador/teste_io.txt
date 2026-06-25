@@ -1,14 +1,18 @@
-/* Exemplo 1 - Leitura e escrita de dados */
 {
     int matricula;
     real media;
     str disciplina;
+    chr letra;
 
     scanf(matricula);
     scanf(disciplina);
 
     media = 8.5;
+    letra = 'A';
+    disciplina = "Compiladores";
 
     printf(matricula);
     printf(media);
+    printf(letra);
+    printf("Resultado final");
 }

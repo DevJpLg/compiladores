@@ -2,26 +2,33 @@ package compilador;
 
 import java_cup.runtime.*;
 
-/* Analisador sintatico da linguagem LangZ */
 parser code {:
 
-    // Exibe o erro com numero de linha e o token que causou o problema
     public void syntax_error(Symbol s) {
-        String tok = (s.value != null) ? s.value.toString() : "?";
-        System.err.println("Erro Sintatico [linha " + (s.left + 1) +
-                           ", col " + (s.right + 1) +
-                           "]: token inesperado -> " + tok);
+        int linha = (s.left >= 0) ? s.left + 1 : -1;
+        String tok = (s.value != null) ? s.value.toString() : "fim de arquivo";
+        if (linha > 0) {
+            System.err.println("Erro Sintatico [linha " + linha +
+                               ", col " + (s.right + 1) +
+                               "]: token inesperado -> " + tok);
+        } else {
+            System.err.println("Erro Sintatico [fim do arquivo]: esperava mais tokens");
+        }
     }
 
     public void unrecovered_syntax_error(Symbol s) throws Exception {
+        int linha = (s.left >= 0) ? s.left + 1 : -1;
         String tok = (s.value != null) ? s.value.toString() : "fim de arquivo";
-        throw new Exception("Erro fatal [linha " + (s.left + 1) +
-                            "]: analise interrompida em -> " + tok);
+        if (linha > 0) {
+            throw new Exception("Erro fatal [linha " + linha +
+                                "]: analise interrompida em -> " + tok);
+        } else {
+            throw new Exception("Erro fatal [fim do arquivo]: esperava '}' para fechar o bloco");
+        }
     }
 
 :};
 
-/* === Terminais === */
 terminal IF, ELSE, WHILE, FOR, PRINTF, SCANF;
 terminal T_INT, T_REAL, T_CHR, T_STR;
 terminal TRUE, FALSE;
@@ -34,14 +41,12 @@ terminal Double NUM;
 terminal String LIT_CHR;
 terminal String LIT_STR;
 
-/* === Nao Terminais === */
 non terminal programa;
 non terminal bloco, lista_cmd, cmd;
 non terminal decl, tipo, atrib, atrib_inc;
 non terminal se_senao, opt_senao, enquanto, para, escrever, ler;
 non terminal expr, termo;
 
-/* === Precedencia de operadores (menor para maior) === */
 precedence left OR;
 precedence left AND;
 precedence left EQ, NEQ;
@@ -51,7 +56,6 @@ precedence left TIMES, DIV;
 precedence right NOT;
 precedence left ELSE;
 
-/* === Gramatica === */
 start with programa;
 
 programa  ::= bloco;
@@ -71,36 +75,27 @@ cmd       ::= decl
             | ler
             | bloco;
 
-/* Declaracao de variavel: tipo nome; */
 decl      ::= tipo ID SEMI;
 
 tipo      ::= T_INT | T_REAL | T_CHR | T_STR;
 
-/* Atribuicao: nome = expr; */
 atrib     ::= ID ATTR expr SEMI;
 
-/* Incremento do for (sem ponto e virgula) */
 atrib_inc ::= ID ATTR expr;
 
-/* Condicional */
 se_senao  ::= IF LPAR expr RPAR bloco opt_senao;
 
 opt_senao ::= ELSE bloco
-            | /* vazio */;
+            | ;
 
-/* Laco while */
 enquanto  ::= WHILE LPAR expr RPAR bloco;
 
-/* Laco for */
 para      ::= FOR LPAR atrib expr SEMI atrib_inc RPAR bloco;
 
-/* Saida: printf(expr); */
 escrever  ::= PRINTF LPAR expr RPAR SEMI;
 
-/* Entrada: scanf(id); */
 ler       ::= SCANF LPAR ID RPAR SEMI;
 
-/* Expressoes aritmeticas, relacionais e logicas */
 expr      ::= expr PLUS  expr
             | expr MINUS expr
             | expr TIMES expr
